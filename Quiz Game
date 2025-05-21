@@ -1,0 +1,99 @@
+import java.util.*;
+
+class Question {
+    String question;
+    String[] options;
+    char correctAnswer;
+
+    Question(String question, String[] options, char correctAnswer) {
+        this.question = question;
+        this.options = options;
+        this.correctAnswer = correctAnswer;
+    }
+
+    public void displayQuestion() {
+        System.out.println("\n" + question);
+        char optionLabel = 'A';
+        for (String option : options) {
+            System.out.println(optionLabel + ". " + option);
+            optionLabel++;
+        }
+    }
+
+    public boolean isCorrect(char answer) {
+        return Character.toUpperCase(answer) == Character.toUpperCase(correctAnswer);
+    }
+}
+
+public class QuizGame {
+    static Scanner scanner = new Scanner(System.in);
+    static List<Question> questions = new ArrayList<>();
+    static int score = 0;
+
+    public static void main(String[] args) {
+        System.out.println("🎮 Welcome to the Java Quiz Game!");
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+        System.out.println("\nHello, " + name + "! Let's get started.");
+
+        setupQuestions();
+        playGame();
+
+        System.out.println("\n🎉 Quiz Over!");
+        System.out.println("Your final score is: " + score + "/" + questions.size());
+        System.out.println("Thanks for playing, " + name + "!");
+    }
+
+    static void setupQuestions() {
+        questions.add(new Question(
+                "Q.1 What is the capital of France?",
+                new String[]{"Berlin", "Madrid", "Paris", "Rome"},
+                'C'
+        ));
+        questions.add(new Question(
+                "Q.2 Which language runs in a web browser?",
+                new String[]{"Java", "C", "Python", "JavaScript"},
+                'D'
+        ));
+        questions.add(new Question(
+                "Q.3 What does OOP stand for?",
+                new String[]{"Object Oriented Programming", "Open Online Program", "Object Operation Process", "Over Optimization Pattern"},
+                'A'
+        ));
+        questions.add(new Question(
+                "Q.4 Which company developed Java?",
+                new String[]{"Apple", "Microsoft", "Sun Microsystems", "Google"},
+                'C'
+        ));
+    }
+
+    static void playGame() {
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            q.displayQuestion();
+            char userAnswer = getUserAnswer();
+
+            if (q.isCorrect(userAnswer)) {
+                System.out.println("✅ Correct!");
+                score++;
+            } else {
+                System.out.println("❌ Wrong! The correct answer was: " + q.correctAnswer);
+            }
+        }
+    }
+
+    static char getUserAnswer() {
+        System.out.print("Your answer (A/B/C/D): ");
+        char answer;
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.length() == 1 && "ABCDabcd".contains(input)) {
+                answer = input.charAt(0);
+                break;
+            } else {
+                System.out.print("Invalid input. Please enter A, B, C, or D: ");
+            }
+        }
+        return answer;
+    }
+}
